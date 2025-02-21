@@ -1,0 +1,81 @@
+#This is like an alt+tab alternative
+bindsym Mod1+Tab exec rofi -show window
+
+#This is the same alt+tab but ugly
+#bindsym Mod1+Tab exec sh -c "wmctrl -l | dmenu -i -fn 'monospace-10' -nb '#000000' -nf '#ffffff' -sb '#ffffff' -sf '#000000' | cut -d ' ' -f 1 | xargs wmctrl -ia"
+
+
+#Make dual screen workable
+exec --no-startup-id ~/.config/i3/monitor.sh
+
+set $mod Mod4
+
+# Font for window titles
+font pango:monospace 10
+
+# Use Mouse+$mod to drag floating windows
+floating_modifier $mod
+
+# Start applications
+exec --no-startup-id picom --experimental-backends
+exec --no-startup-id nm-applet
+exec --no-startup-id clipmenud
+exec --no-startup-id feh --bg-scale ~/Pictures/wallpaper.jpg
+
+# Basic keybindings
+bindsym $mod+Return exec Konsole 
+bindsym $mod+d exec rofi -show drun
+bindsym $mod+Shift+q kill
+bindsym $mod+Shift+r restart
+
+# Layout management
+bindsym $mod+h split h
+bindsym $mod+v split v
+bindsym $mod+f fullscreen toggle
+bindsym $mod+Shift+space floating toggle
+bindsym $mod+space focus mode_toggle
+
+# Snapping windows
+bindsym $mod+Down resize grow height 10 px or 10 ppt
+bindsym $mod+Up resize shrink height 10 px or 10 ppt
+bindsym $mod+Left resize shrink width 10 px or 10 ppt
+bindsym $mod+Right resize grow width 10 px or 10 ppt
+
+# Window focus
+bindsym $mod+j focus left
+bindsym $mod+k focus right
+bindsym $mod+l focus down
+
+
+# Make mouse cursor not automatically select 
+focus_follows_mouse no
+
+
+# Workspace management
+set $ws1 "1: Dev"
+set $ws2 "2: Web"
+set $ws3 "3: Chat"
+set $ws4 "4: Media"
+
+bindsym $mod+1 workspace $ws1
+bindsym $mod+2 workspace $ws2
+bindsym $mod+3 workspace $ws3
+bindsym $mod+4 workspace $ws4
+
+# Moving windows to workspaces
+bindsym $mod+Shift+1 move container to workspace $ws1
+bindsym $mod+Shift+2 move container to workspace $ws2
+bindsym $mod+Shift+3 move container to workspace $ws3
+bindsym $mod+Shift+4 move container to workspace $ws4
+
+# Lock screen
+bindsym $mod+Shift+l exec i3lock -c 000000
+
+# Exit i3
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Exit i3?' -b 'Yes, exit' 'i3-msg exit'"
+
+
+bar {
+    status_command i3status 
+}
+
