@@ -1,6 +1,9 @@
 #This is like an alt+tab alternative
 bindsym Mod1+Tab exec rofi -show window
 
+#THis is workingf 
+bindsym $mod+Shift+s exec sh -c "maim -s /tmp/screenshot.png && xclip -selection clipboard -t image/png /tmp/screenshot.png && rm /tmp/screenshot.png"
+
 #This is the same alt+tab but ugly
 #bindsym Mod1+Tab exec sh -c "wmctrl -l | dmenu -i -fn 'monospace-10' -nb '#000000' -nf '#ffffff' -sb '#ffffff' -sf '#000000' | cut -d ' ' -f 1 | xargs wmctrl -ia"
 
