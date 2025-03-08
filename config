@@ -1,11 +1,16 @@
 #This is like an alt+tab alternative
 bindsym Mod1+Tab exec rofi -show window
+#exec_always --no-startup-id feh --bg-scale 
+
+
+#This is for running picon so that alacritty stays  translucent
+exec --no-startup-id picom --experimental-backends -b
+
+
+
 
 #THis is workingf 
 bindsym $mod+Shift+s exec sh -c "maim -s /tmp/screenshot.png && xclip -selection clipboard -t image/png /tmp/screenshot.png && rm /tmp/screenshot.png"
-
-#This is the same alt+tab but ugly
-#bindsym Mod1+Tab exec sh -c "wmctrl -l | dmenu -i -fn 'monospace-10' -nb '#000000' -nf '#ffffff' -sb '#ffffff' -sf '#000000' | cut -d ' ' -f 1 | xargs wmctrl -ia"
 
 
 #Make dual screen workable
@@ -23,10 +28,9 @@ floating_modifier $mod
 exec --no-startup-id picom --experimental-backends
 exec --no-startup-id nm-applet
 exec --no-startup-id clipmenud
-exec --no-startup-id feh --bg-scale ~/Pictures/wallpaper.jpg
-
+exec --no-startup-id feh --bg-scale /usr/share/backgrounds/warty-final-ubuntu.png --output eDP-1 --bg-scale /usr/share/backgrounds/warty-final-ubuntu.png --output HDMI-1-0
 # Basic keybindings
-bindsym $mod+Return exec Konsole 
+bindsym $mod+Return exec Alacritty 
 bindsym $mod+d exec rofi -show drun
 bindsym $mod+Shift+q kill
 bindsym $mod+Shift+r restart
@@ -79,6 +83,10 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Exit i3?' -b 'Yes, exit' 'i3
 
 
 bar {
-    status_command i3status 
+    status_command i3status
+    #status_command polybar bar
 }
+
+
+# exec_always ~/.config/polybar/launch.sh &
 
