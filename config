@@ -6,10 +6,7 @@ bindsym Mod1+Tab exec rofi -show window
 #This is for running picon so that alacritty stays  translucent
 exec --no-startup-id picom --experimental-backends -b
 
-
-
-
-#THis is workingf 
+# This is for screenshotts
 bindsym $mod+Shift+s exec sh -c "maim -s /tmp/screenshot.png && xclip -selection clipboard -t image/png /tmp/screenshot.png && rm /tmp/screenshot.png"
 
 
@@ -30,7 +27,7 @@ exec --no-startup-id nm-applet
 exec --no-startup-id clipmenud
 exec --no-startup-id feh --bg-scale /usr/share/backgrounds/warty-final-ubuntu.png --output eDP-1 --bg-scale /usr/share/backgrounds/warty-final-ubuntu.png --output HDMI-1-0
 # Basic keybindings
-bindsym $mod+Return exec Alacritty 
+bindsym $mod+Return exec gnome-terminal 
 bindsym $mod+d exec rofi -show drun
 bindsym $mod+Shift+q kill
 bindsym $mod+Shift+r restart
@@ -81,12 +78,6 @@ bindsym $mod+Shift+l exec i3lock -c 000000
 # Exit i3
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'Exit i3?' -b 'Yes, exit' 'i3-msg exit'"
 
-
 bar {
-    status_command i3status
-    #status_command polybar bar
+        status_command  i3status
 }
-
-
-# exec_always ~/.config/polybar/launch.sh &
-

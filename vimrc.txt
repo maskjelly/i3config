@@ -1,0 +1,212 @@
+" Plugin installation
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+call plug#begin('~/.vim/plugged')
+Plug 'dense-analysis/ale'                " error checking
+Plug 'vim-airline/vim-airline'           " status bar
+Plug 'vim-airline/vim-airline-themes'
+Plug 'preservim/tagbar'                  " code structure viewer
+Plug 'ludovicchabant/vim-gutentags'      " automatic tags management
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'jiangmiao/auto-pairs'              " auto pair brackets/quotes
+Plug 'joshdick/onedark.vim'
+Plug 'crusoexia/vim-monokai'
+Plug 'preservim/nerdtree'                " file explorer
+Plug 'neoclide/coc.nvim', {'branch': 'release'}  " language server support
+call plug#end()
+
+" Basic settings
+syntax enable
+filetype plugin indent on
+set termguicolors  " Enable true color support (for modern terminals)
+highlight Normal ctermbg=NONE guibg=NONE  " Keep background transparent
+set relativenumber
+" Set minimum width of number column (default is 4)
+set numberwidth=1
+" Make line number background match Monokai theme
+highlight LineNr ctermbg=235 guibg=#273454
+set signcolumn=no
+
+" Error highlighting (minimal and clean)
+highlight SpellBad guifg=#FF5555 gui=undercurl  " Bright red squiggles
+highlight Error guifg=#FFFFFF guibg=#FF5555 gui=bold  " Bright red background
+highlight Todo guifg=#14161A guibg=#E5C07B gui=bold   " Yellow for TODOs
+highlight WarningMsg guifg=#FF9555 gui=none  " Orange for warnings
+
+" ALE (linter) settings
+let g:ale_linters = {
+\   'c': ['gcc', 'clang', 'cppcheck'],
+\   'cpp': ['g++', 'clang++', 'cppcheck'],
+\   'python': ['flake8', 'pylint'],
+\   'rust': ['analyzer', 'cargo'],
+\}
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '⚠'
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_python_flake8_options = '--max-line-length=88'
+let g:ale_lint_on_text_changed = 'always'
+let g:ale_lint_on_enter = 1
+let g:ale_lint_on_save = 1
+highlight ALEErrorSign guifg=#FF5555 gui=bold guibg=#14161A
+highlight ALEWarningSign guifg=#FF9555 gui=bold guibg=#14161A
+highlight ALEInfoSign guifg=#56B6C2 gui=bold guibg=#14161A
+highlight ALEError guifg=#FFFFFF guibg=#FF5555 gui=bold
+highlight ALEWarning guifg=#14161A guibg=#FF9555 gui=bold
+highlight ALEInfo guifg=#14161A guibg=#56B6C2 gui=italic
+let g:ale_virtualtext_cursor = 'all'
+let g:ale_virtualtext_prefix = ' 󰅙 '  " Needs nerd font or replace with '>>'
+let g:ale_virtualtext_delay = 50
+highlight ALEVirtualTextError guifg=#FF5555 gui=italic
+highlight ALEVirtualTextWarning guifg=#FF9555 gui=italic
+highlight ALEVirtualTextInfo guifg=#56B6C2 gui=italic
+
+" Gutentags settings
+let g:gutentags_cache_dir = expand('~/.cache/tags')
+let g:gutentags_ctags_executable = 'ctags'
+let g:gutentags_project_root = ['.git', '.hg', '.svn', '.root', '.project']
+let g:gutentags_exclude_filetypes = ['gitcommit', 'gitconfig', 'gitrebase', 'gitsendemail', 'git']
+
+" NERDTree settings
+nnoremap <C-n> :NERDTreeToggle<CR>
+let g:NERDTreeQuitOnOpen = 1
+let g:NERDTreeMinimalUI = 1
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeWinSize = 35
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+nnoremap <leader>n :NERDTreeFind<CR>
+highlight NERDTreeDir guifg=#55FF55 gui=none  " Bright green for directories
+highlight NERDTreeDirSlash guifg=#56B6C2 gui=none  " Cyan for slashes
+highlight NERDTreeFile guifg=#ABB2BF gui=none  " Soft gray-white for files
+highlight NERDTreeExecFile guifg=#E5C07B gui=none  " Yellow for executables
+
+" CoC settings
+set updatetime=300
+set shortmess+=c
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+highlight CocErrorSign guifg=#FF5555 guibg=#14161A
+highlight CocWarningSign guifg=#FF9555 guibg=#14161A
+highlight CocInfoSign guifg=#56B6C2 guibg=#14161A
+highlight CocHintSign guifg=#C678DD guibg=#14161A
+highlight CocMenuSel guifg=#14161A guibg=#61AFEF  " Blue for selected item
+
+" Formatting shortcuts
+nnoremap <C-S-i> gg=G<C-o><C-o>
+nnoremap <leader>i gg=G<C-o><C-o>
+vnoremap <C-S-i> =
+vnoremap <leader>i =
+
+" Language-specific settings
+autocmd FileType cpp setlocal cindent
+autocmd FileType cpp setlocal cinoptions=(0,u0,U0
+autocmd FileType cpp setlocal formatoptions=croql
+autocmd FileType cpp setlocal tabstop=2 shiftwidth=2
+autocmd FileType python setlocal tabstop=4 shiftwidth=4 expandtab
+autocmd FileType python setlocal formatoptions=croql
+autocmd FileType python setlocal textwidth=88
+autocmd BufNewFile *.py if filereadable(expand('~/.vim/templates/python_competitive.py')) | 0r ~/.vim/templates/python_competitive.py | endif
+
+" Indentation settings
+set tabstop=4
+set shiftwidth=4
+set expandtab
+set autoindent
+set smartindent
+set nobackup
+set nowritebackup
+
+" Search settings
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+highlight Search guifg=#14161A guibg=#E5C07B gui=none  " Yellow for search
+highlight IncSearch guifg=#14161A guibg=#FF5555 gui=none  " Red for incsearch
+
+" Match parentheses
+set showmatch
+set matchtime=2
+highlight MatchParen guifg=#FFFFFF guibg=#C678DD gui=bold  " Purple for parentheses
+
+" Scrolling and navigation
+set scrolloff=5
+set sidescrolloff=5
+set wrap
+set linebreak
+
+" Split window behavior
+set splitbelow
+set splitright
+
+" Undo settings
+set undofile
+set undodir=~/.vim/undodir
+
+" Competitive programming shortcuts
+map <F12> :w<CR>:!g++ -std=c++17 -O2 -Wall % -o %:r && ./%:r<CR>
+map <F9> :w<CR>:!g++ -std=c++17 -Wall % -o %:r && ./%:r < input.txt > output.txt<CR>
+map <F8> :w<CR>:!python3 % < input.txt > output.txt<CR>
+map <F3> gg=G<C-o><C-o>
+autocmd BufNewFile *.cpp if filereadable(expand('~/.vim/templates/cp.cpp')) | 0r ~/.vim/templates/cp.cpp | endif
+autocmd FileType cpp inoremap <F5> ios_base::sync_with_stdio(false);<CR>cin.tie(NULL);<CR>cout.tie(NULL);<CR>
+
+" Miscellaneous settings
+set mouse=a
+set clipboard=unnamedplus
+set timeoutlen=500
+set tags=./tags,tags;$HOME
+
+
+
+ colorscheme monokai
+" Auto-complete brackets
+inoremap { {}<Left>
+inoremap {<CR> {<CR>}<Esc>O
+
+" Status line configuration
+set laststatus=2
+let g:airline_powerline_fonts = 0
+let g:airline#extensions#tabline#enabled = 0
+let g:airline#extensions#branch#enabled = 0
+let g:airline_section_b = '%f'
+let g:airline_section_c = ''
+let g:airline_section_x = ''
+let g:airline_section_y = '%l:%c'
+let g:airline_section_z = '%m'
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+
+" Map Ctrl+/ to comment/uncomment
+" For normal terminal (might register as Ctrl-/)
+noremap <C-_> :Commentary<CR>
+vnoremap <C-_> :Commentary<CR>
+" For some terminals (might register as Ctrl-/)
+noremap <C-/> :Commentary<CR>
+vnoremap <C-/> :Commentary<CR>
+
+
+
+" Leader key
+
+let mapleader = "\<Space>"
