@@ -1,0 +1,56 @@
+# Shell configuration
+[terminal.shell]
+program = "/usr/bin/zsh"
+args = ["--login"]
+
+# Font configuration
+[font]
+size = 10.0
+
+[font.normal]
+family = "DejaVu Sans Mono"  # Monospaced font similar to Xterm's default
+style = "Regular"
+
+# Window settings to mimic Xterm's minimalist look
+[window]
+startup_mode = "Windowed"
+decorations = "none"  # Remove window decorations like Xterm (depends on window manager)
+dynamic_padding = false
+padding.x = 2
+padding.y = 2
+opacity = 1.0  # No transparency, like Xterm
+
+# Cursor settings to match Xterm
+[cursor]
+style = "Block"
+blink_interval = 750  # Xterm's default blink rate (in milliseconds)
+unfocused_hollow = false
+
+# Color scheme: Black and white with selective colors for highlights
+[colors.primary]
+background = "#14161A"  # Pure black background like Xterm
+foreground = "#FFFFFF"  # Pure white foreground like Xterm
+
+[colors.cursor]
+text = "CellBackground"
+cursor = "#FFFFFF"      # White cursor, matching Xterm's default
+
+# ANSI colors for highlights (similar to Xterm's default palette)
+[colors.normal]
+black   = "#000000"     # Pure black
+red     = "#FF0000"     # Red for errors or highlights
+green   = "#00FF00"     # Green for folder names
+yellow  = "#FFFF00"     # Yellow for warnings
+magenta = "#FF00FF"     # Magenta for special items
+cyan    = "#00FFFF"     # Cyan for emphasis
+white   = "#FFFFFF"     # Pure white
+
+[colors.bright]
+black   = "#923423"     # Gray (like Xterm's bright black)
+red     = "#FF5555"     # Bright red
+green   = "#55FF55"     # Bright green for folder names
+yellow  = "#FFFF55"     # Bright yellow
+magenta = "#FF55FF"     # Bright magenta
+cyan    = "#55FFFF"     # Bright cyan
+white   = "#FFFFFF"     # Pure white
+
